@@ -8,7 +8,7 @@ import Signup from './Signup.jsx'
 import Dish from './Dish.jsx'  
 import Cart from './Cart.jsx'  
 import Orders from './Orders.jsx'   
-import { UserProvider } from './Usercontext.jsx'
+import { UserProvider } from './UserContext.jsx'
 import Userprofile from './Userprofile.jsx'
 import About from './About.jsx'
 
