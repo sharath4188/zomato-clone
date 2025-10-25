@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './Navbar.jsx';
 import { DataContext } from './Datacontext.jsx';
 import { useContext } from 'react';
@@ -16,6 +16,11 @@ function Dish() {
     const { data } = useContext(DataContext);
     let dishes = data.find(dish => dish.name == name);
    
+    // Scroll to top when component mounts or dish changes
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [name]);
+
     const handlecart = () => {
         const isItemInCart = user.Cart.some(item => item.name === dishes.name);
         
@@ -43,13 +48,15 @@ function Dish() {
             </>
         );
     }
+    
     function indicate(){
         alert('Login first❗')
     }
-    // ----------------------------------------------------------for suggestions-----------------------------------------------------
-      const relatedDishes = data
-    .filter((item) => item.type === dishes.type && item.name !== dishes.name)
-    .slice(0, 8); // Limit to 4 dishes
+    
+    // For suggestions
+    const relatedDishes = data
+        .filter((item) => item.type === dishes.type && item.name !== dishes.name)
+        .slice(0, 8);
 
     return (
         <>
@@ -167,7 +174,6 @@ function Dish() {
                                     </div>
                                     
                                     {/* Order Buttons */}
-                                    
                                     <div className="flex flex-col sm:flex-row gap-3">
                                         <button 
                                             onClick={() => user.username === '' ? indicate() : handleorder()} 
@@ -180,7 +186,7 @@ function Dish() {
                                         </button>
 
                                         <button 
-                                            onClick={() => user.username === '' ? indicate() : handleorder()} 
+                                            onClick={() => user.username === '' ? indicate() : handlecart()} 
                                             className="flex-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 hover:from-emerald-600 hover:via-teal-600 hover:to-emerald-600 text-white font-bold text-sm sm:text-base md:text-lg px-4 py-3 sm:py-3.5 rounded-xl shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95 flex items-center justify-center gap-2"
                                         >
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,42 +201,42 @@ function Dish() {
                     </div>
                 </div>
             </div>
-              {relatedDishes.length > 0 && (
-          <div className="relative z-10 max-w-6xl mx-auto px-4 pb-20">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 text-center bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
-              You may also like 🍽️
-            </h2>
+            
+            {/* Related Dishes Section */}
+            {relatedDishes.length > 0 && (
+                <div className="relative z-10 max-w-6xl mx-auto px-4 pb-20">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-800 text-center bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
+                        You may also like 🍽️
+                    </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {relatedDishes.map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
-                >
-                     <Link to={`/${item.name}`}>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg text-gray-800 truncate">
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">{item.restaurant}</p>
-                      <p className="font-semibold text-green-600 mt-1">
-                        ₹{item.price}
-                      </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {relatedDishes.map((item, index) => (
+                            <div
+                                key={index}
+                                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
+                            >
+                                <Link to={`/${item.name}`}>
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                    <div className="p-4">
+                                        <h3 className="font-bold text-lg text-gray-800 truncate">
+                                            {item.name}
+                                        </h3>
+                                        <p className="text-sm text-gray-500">{item.restaurant}</p>
+                                        <p className="font-semibold text-green-600 mt-1">
+                                            ₹{item.price}
+                                        </p>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))}
                     </div>
-                  </Link>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-      
+            )}
 
-      
             <style jsx>{`
                 .animation-delay-2000 {
                     animation-delay: 2s;
